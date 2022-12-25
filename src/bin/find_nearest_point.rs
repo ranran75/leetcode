@@ -26,14 +26,15 @@ impl Solution {
                     Self::is_nearest(nearest, nearest_idx, idx as i32, point[0], x)
             }
         });
-        return nearest_idx;
+        nearest_idx
     }
+
     fn is_nearest(nearest: i32, pre_idx: i32, idx: i32, i: i32, j: i32) -> (i32, i32) {
         let dist = (i - j).abs();
-        return if dist >= nearest {
+        if dist >= nearest {
             (nearest, pre_idx)
         } else {
             (dist, idx)
-        };
+        }
     }
 }

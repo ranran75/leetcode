@@ -9,23 +9,16 @@ impl<const N: usize> TrieNode<N> {
 
 impl<const N: usize> Trie<N> {
     pub fn new() -> Self {
-        return Trie(TrieNode::new());
+        Trie(TrieNode::new())
     }
     pub fn add_word(&mut self, word: String) {
         let mut cur = &mut self.0;
         for c in word.bytes() {
             let index = (c - b'a') as usize;
-            let next_node = match &cur.0[index] {
-                Some(_) => None,
-                _ => Some(TrieNode::new()),
-            };
-            match next_node {
-                Some(next) => {
-                    cur.0[index] = Some(next);
-                }
-                None => {}
+            if cur.0[index].is_none() {
+                cur.0[index] = Some(TrieNode::new());
             }
-            cur = cur.0[index].as_mut().unwrap()
+            cur = cur.0[index].as_mut().unwrap();
         }
         cur.1 = true;
     }
@@ -34,23 +27,22 @@ impl<const N: usize> Trie<N> {
         let root = &self.0;
         let mut result = Vec::new();
         Self::dfs(root, "".to_string(), &mut result);
-        return result;
+        result
     }
 
     pub fn search(&self, word: &str) -> bool {
         let mut res = false;
-        let mut reach_tail = true;
+        let mut reach_tail = false;
         let mut cur = &self.0;
-        for c in word.bytes() {
+        for (i, c) in word.bytes().enumerate() {
             let index = (c - b'a') as usize;
-            match &cur.0[index] {
-                Some(next) => {
-                    cur = next;
-                }
-                _ => {
-                    reach_tail = false;
-                    break;
-                }
+            if let Some(next) = &cur.0[index] {
+                cur = next;
+            } else {
+                break;
+            }
+            if i == word.len() - 1 {
+                reach_tail = true;
             }
         }
         if reach_tail && cur.1 {
@@ -65,9 +57,8 @@ impl<const N: usize> Trie<N> {
             }
             false => {}
         }
-        cur.0.iter().enumerate().for_each(|(index, x)| match x {
-            None => {}
-            Some(child) => {
+        cur.0.iter().enumerate().for_each(|(index, x)| {
+            if let Some(child) = x {
                 let mut new_str = s.clone();
                 let c = char::from_u32((index as u8 + b'a') as u32).unwrap();
                 new_str.push(c);
