@@ -5,10 +5,10 @@ fn main() {
     trie.add_word("abc".to_string());
     trie.add_word("abd".to_string());
     trie.add_word("mgc".to_string());
-    let res = trie.get_all_word();
-    println!("{:?}", res);
-    let bool = trie.search("mgc");
-    println!("{:?}", bool);
-    let bool2 = trie.search("mgcd");
-    println!("{:?}", bool2);
+    let test_res1 = trie.get_all_word();
+    println!("{:?}", test_res1);
+    let test_res2 = trie.search("mgc");
+    println!("{:?}", test_res2);
+    let test_res3 = trie.search("mgcd");
+    println!("{:?}", test_res3);
 }

@@ -1,2 +1,2 @@
-pub mod remove_kdigits;
+pub mod remove_k_digits;
 pub mod trie;

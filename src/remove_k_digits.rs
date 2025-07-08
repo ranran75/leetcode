@@ -1,7 +1,7 @@
 pub struct Solution {}
 
 impl Solution {
-    pub fn remove_kdigits(num: String, k: i32) -> String {
+    pub fn remove_k_digits(num: String, k: i32) -> String {
         let mut remove_count = k as usize;
         let mut stack = vec![];
 
@@ -17,10 +17,10 @@ impl Solution {
             }
             stack.push(digit);
         }
-        return stack
+        stack
             .drain(..stack.len() - remove_count)
             .skip_while(|&digit| digit == b'0')
             .map(|digit| digit as char)
-            .collect();
+            .collect()
     }
 }
