@@ -3,13 +3,19 @@ pub struct Trie<const N: usize>(TrieNode<N>);
 
 impl<const N: usize> TrieNode<N> {
     fn new() -> Self {
-        return TrieNode(Box::new(core::array::from_fn(|_| None)), false);
+        TrieNode(Box::new(core::array::from_fn(|_| None)), false)
+    }
+}
+
+impl<const N: usize> Default for Trie<N> {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
 impl<const N: usize> Trie<N> {
     pub fn new() -> Self {
-        return Trie(TrieNode::new());
+        Trie(TrieNode::new())
     }
     pub fn add_word(&mut self, word: String) {
         let mut cur = &mut self.0;
@@ -19,11 +25,8 @@ impl<const N: usize> Trie<N> {
                 Some(_) => None,
                 _ => Some(TrieNode::new()),
             };
-            match next_node {
-                Some(next) => {
-                    cur.0[index] = Some(next);
-                }
-                None => {}
+            if let Some(next) = next_node {
+                cur.0[index] = Some(next);
             }
             cur = cur.0[index].as_mut().unwrap()
         }
@@ -33,8 +36,8 @@ impl<const N: usize> Trie<N> {
     pub fn get_all_word(&self) -> Vec<String> {
         let root = &self.0;
         let mut result = Vec::new();
-        Self::dfs(root, "".to_string(), &mut result);
-        return result;
+        Self::dfs(root, &mut "".to_string(), &mut result);
+        result
     }
 
     pub fn search(&self, word: &str) -> bool {
@@ -58,7 +61,7 @@ impl<const N: usize> Trie<N> {
         }
         res
     }
-    fn dfs(cur: &TrieNode<N>, s: String, result: &mut Vec<String>) {
+    fn dfs(cur: &TrieNode<N>, s: &mut String, result: &mut Vec<String>) {
         match cur.1 {
             true => {
                 result.push(s.clone());
@@ -68,10 +71,10 @@ impl<const N: usize> Trie<N> {
         cur.0.iter().enumerate().for_each(|(index, x)| match x {
             None => {}
             Some(child) => {
-                let mut new_str = s.clone();
                 let c = char::from_u32((index as u8 + b'a') as u32).unwrap();
-                new_str.push(c);
-                Self::dfs(child, new_str, result)
+                s.push(c);
+                Self::dfs(child, s, result);
+                s.pop();
             }
         })
     }

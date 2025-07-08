@@ -1,5 +1,7 @@
 use leetcode::trie::Trie;
 
+
+//https://leetcode.cn/problems/stream-of-characters/description/
 fn main() {
     let mut trie: Trie<32> = Trie::new();
     trie.add_word("abc".to_string());
