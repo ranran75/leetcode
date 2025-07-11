@@ -19,23 +19,27 @@ impl Solution {
         }
         let pivot_index = Self::partition(arr, low, high);
         if pivot_index > 0 {
-            Self::quick_sort(arr, low, pivot_index - 1);
+            Self::quick_sort(arr, low, pivot_index);
         }
         Self::quick_sort(arr, pivot_index + 1, high);
     }
 
     fn partition(arr: &mut [i32], low: usize, high: usize) -> usize {
         Self::get_median_of_three(arr, low, high);
-        let mut pivot_index = low;
-        let pivot = arr[pivot_index];
-        for i in (low + 1)..(high + 1) {
-            if arr[i] < pivot {
-                pivot_index += 1;
-                arr.swap(pivot_index, i);
+        let mut left = low;
+        let mut right = high;
+        let pivot = arr[left];
+        while left < right {
+            while arr[right] >= pivot && right > left {
+                right -= 1;
             }
+            while arr[left] <= pivot && right > left {
+                left += 1;
+            }
+            arr.swap(left, right);
         }
-        arr.swap(pivot_index, low);
-        pivot_index
+        arr.swap(low, right);
+        right
     }
 
     fn get_median_of_three(nums: &mut [i32], low: usize, high: usize) {
